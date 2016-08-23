@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest, os, tempfile, socket, stat
-from simple import Client, Daemon
+from simple import Client, Daemon, is_socket, is_socket_alive
 
 class ClientTests(unittest.TestCase):
     pass
@@ -16,15 +16,15 @@ class DaemonSocketTests(unittest.TestCase):
         self.socket.listen(1)
 
     def testSocketAlreadyExists(self):
-        self.assertTrue(self.d.is_socket(self.tempsocket))
-        self.assertFalse(self.d.is_socket('/tmp/this_file_does_not_exist'))
-        self.assertRaises(Exception, self.d.is_socket, arge=(('/tmp/',)))
+        self.assertTrue(is_socket(self.tempsocket))
+        self.assertFalse(is_socket('/tmp/this_file_does_not_exist'))
+        self.assertRaises(Exception, is_socket, arge=(('/tmp/',)))
 
     def testSocketAlive(self):
-        self.assertTrue(self.d.is_socket_alive(self.tempsocket))
+        self.assertTrue(is_socket_alive(self.tempsocket))
 
         self.socket.shutdown(socket.SHUT_RDWR)
-        self.assertFalse(self.d.is_socket_alive(self.tempsocket))
+        self.assertFalse(is_socket_alive(self.tempsocket))
 
     def testCreateSocket(self):
         self.assertRaises(Exception, self.d.create_socket,
